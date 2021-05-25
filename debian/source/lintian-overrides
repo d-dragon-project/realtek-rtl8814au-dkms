@@ -1,0 +1,2 @@
+#we export the variable provided by /usr/share/dpkg/pkg-info.mk
+dh-exec-subst-unknown-variable debian/realtek-rtl8814au-dkms.install DEB_VERSION_UPSTREAM

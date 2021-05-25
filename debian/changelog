@@ -1,0 +1,5 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20210331.bdf80b5-0kali1) kali-dev; urgency=medium
+
+    * Initial release (see 7193)
+
+ -- Sophie Brun <sophie@offensive-security.com>  Tue, 25 May 2021 11:05:39 +0200
