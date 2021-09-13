@@ -228,6 +228,9 @@ struct registry_priv {
 #ifdef CONFIG_NARROWBAND_SUPPORTING
 	u8	rtw_nb_config;
 #endif
+#ifdef CONFIG_SW_LED
+	u8	led_ctrl;
+#endif
 	u8	acm_method;
 	/* WMM */
 	u8	wmm_enable;
@@ -496,8 +499,6 @@ struct registry_priv {
 #ifdef CONFIG_RTW_MESH
 	u8 peer_alive_based_preq;
 #endif
-	u8 monitor_overwrite_seqnum;
-	u8 monitor_retransmit;
 };
 
 /* For registry parameters */
