@@ -1,3 +1,13 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20210730.824d1d2-0kali1) kali-dev; urgency=medium
+
+  * Change the upstream repo
+  * New upstream version 5.8.5.1~git20210730.824d1d2
+  * Add a patch to fix version in dkms.conf
+  * Fix lintian-overrides
+  * Bump Standards-Version to 4.6.0
+
+ -- Sophie Brun <sophie@offensive-security.com>  Tue, 28 Sep 2021 12:10:46 +0200
+
 realtek-rtl8814au-dkms (5.8.5.1~git20210331.bdf80b5-0kali1) kali-dev; urgency=medium
 
     * Initial release (see 7193)
