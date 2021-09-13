@@ -859,9 +859,9 @@ static void update_attrib_vcs_info(_adapter *padapter, struct xmit_frame *pxmitf
 #ifdef CONFIG_WMMPS_STA
 /*
  * update_attrib_trigger_frame_info
- * For Station mode, if a specific TID of driver setting and an AP support uapsd function, the data 
+ * For Station mode, if a specific TID of driver setting and an AP support uapsd function, the data
  * frame with corresponding TID will be a trigger frame when driver is in wmm power saving mode.
- * 
+ *
  * Arguments:
  * @padapter: _adapter pointer.
  * @pattrib: pkt_attrib pointer.
@@ -871,7 +871,7 @@ static void update_attrib_vcs_info(_adapter *padapter, struct xmit_frame *pxmitf
  */
 static void update_attrib_trigger_frame_info(_adapter *padapter, struct pkt_attrib *pattrib) {
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct pwrctrl_priv 	*pwrpriv = adapter_to_pwrctl(padapter); 
+	struct pwrctrl_priv 	*pwrpriv = adapter_to_pwrctl(padapter);
 	struct qos_priv 	*pqospriv = &pmlmepriv->qospriv;
 	u8 trigger_frame_en = 0;
 
@@ -1584,7 +1584,7 @@ get_sta_info:
 			}
 		}
 	}
-	
+
 	update_attrib_phy_info(padapter, pattrib, psta);
 
 	/* RTW_INFO("%s ==> mac_id(%d)\n",__FUNCTION__,pattrib->mac_id ); */
@@ -1607,7 +1607,7 @@ get_sta_info:
 
 #ifdef CONFIG_WMMPS_STA
 	update_attrib_trigger_frame_info(padapter, pattrib);
-#endif /* CONFIG_WMMPS_STA */	
+#endif /* CONFIG_WMMPS_STA */
 
 	/* pattrib->priority = 5; */ /* force to used VI queue, for testing */
 	pattrib->hw_ssn_sel = pxmitpriv->hw_ssn_seq_no;
@@ -1910,7 +1910,7 @@ s32 rtw_make_wlanhdr(_adapter *padapter , u8 *hdr, struct pkt_attrib *pattrib)
 				/* TBD: temporary set (rspi, eosp) = (0, 1) which means End MPSP */
 				set_rspi(qc, 0);
 				SetEOSP(qc, 1);
-				
+
 				set_mctrl_present(qc, 1);
 			}
 #endif
@@ -4441,22 +4441,7 @@ static void do_queue_select(_adapter	*padapter, struct pkt_attrib *pattrib)
  *	0	success, hardware will handle this xmit frame(packet)
  *	<0	fail
  */
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
-static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv) {
-	int tries;
-	int delay = 300;
-	struct xmit_frame *pmgntframe = NULL;
-
-	for(tries = 3; tries >= 0; tries--) {
-		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-		if(pmgntframe != NULL)
-			return pmgntframe;
-		rtw_udelay_os(delay);
-		delay += delay/2;
-	}
-	return NULL;
-}
-
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
 s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 {
 	u16 frame_ctl;
@@ -4470,10 +4455,16 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	unsigned char	*pframe;
 	u8 dummybuf[32];
-	int len = skb->len, rtap_len, consume;
+	int len = skb->len, rtap_len;
 
 
-	rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
+//	rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
+
+#ifdef CONFIG_MONITOR_MODE_XMIT
+	int consume;
+#endif  /* CONFIG_MONITOR_MODE_XMIT */
+	if (likely(skb))
+		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
 
 #ifndef CONFIG_CUSTOMER_ALIBABA_GENERAL
 	if (unlikely(skb->len < sizeof(struct ieee80211_radiotap_header)))
@@ -4488,11 +4479,7 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
-		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
-		return NETDEV_TX_BUSY;
-	}
-
+#ifdef CONFIG_MONITOR_MODE_XMIT
 	len -= sizeof(struct ieee80211_radiotap_header);
 	rtap_len -= sizeof(struct ieee80211_radiotap_header);
 
@@ -4502,7 +4489,16 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 		rtap_len -= consume;
 		len -= consume;
 	}
-#endif
+#else /* CONFIG_MONITOR_MODE_XMIT */
+
+	if (rtap_len != 12) {
+		RTW_INFO("radiotap len (should be 14): %d\n", rtap_len);
+		goto fail;
+	}
+	_rtw_pktfile_read(&pktfile, dummybuf, rtap_len-sizeof(struct ieee80211_radiotap_header));
+	len = len - rtap_len;
+#endif /* CONFIG_MONITOR_MODE_XMIT */
+#endif /* CONFIG_CUSTOMER_ALIBABA_GENERAL */
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL) {
 		rtw_udelay_os(500);
@@ -4521,7 +4517,6 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if ((frame_ctl & RTW_IEEE80211_FCTL_FTYPE) == RTW_IEEE80211_FTYPE_DATA) {
 
 		pattrib = &pmgntframe->attrib;
-		pattrib->injected = _TRUE;
 		update_monitor_frame_attrib(padapter, pattrib);
 
 		if (is_broadcast_mac_addr(pwlanhdr->addr3) || is_broadcast_mac_addr(pwlanhdr->addr1))
@@ -4530,13 +4525,9 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	} else {
 
 		pattrib = &pmgntframe->attrib;
-		pattrib->injected = _TRUE;
 		update_mgntframe_attrib(padapter, pattrib);
 
 	}
-	//if (pregpriv->monitor_retransmit)
-	//	pattrib->retry_ctrl = _TRUE;
-	//else
 	pattrib->retry_ctrl = _FALSE;
 	pattrib->pktlen = len;
 	pmlmeext->mgnt_seq = GetSequence(pwlanhdr);
@@ -4545,11 +4536,13 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
 	dump_mgntframe(padapter, pmgntframe);
-	DBG_COUNTER(padapter->tx_logs.core_tx);
 
 fail:
+#ifdef CONFIG_MONITOR_MODE_XMIT
+	rtw_endofpktfile(&pktfile);
+#endif /* CONFIG_MONITOR_MODE_XMIT */
 	rtw_skb_free(skb);
-	return NETDEV_TX_OK;
+	return 0;
 }
 #endif
 

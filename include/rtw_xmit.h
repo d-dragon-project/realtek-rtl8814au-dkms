@@ -91,7 +91,7 @@
 #ifdef CONFIG_SINGLE_XMIT_BUF
 	#define NR_XMIT_EXTBUFF	(1)
 #else
-	#define NR_XMIT_EXTBUFF	(64)
+	#define NR_XMIT_EXTBUFF	(32)
 #endif
 
 #ifdef CONFIG_RTL8812A
@@ -481,7 +481,6 @@ struct pkt_attrib {
 #endif /* CONFIG_WMMPS_STA */
 
 	struct sta_info *psta;
-	u8	injected;
 
 	u8 rtsen;
 	u8 cts2self;
