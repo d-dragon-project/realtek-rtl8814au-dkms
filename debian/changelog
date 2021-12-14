@@ -1,3 +1,9 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20210730.824d1d2-0kali2) kali-dev; urgency=medium
+
+  * Add a patch to fix compilation with kernel 5.15
+
+ -- Sophie Brun <sophie@offensive-security.com>  Tue, 14 Dec 2021 17:32:14 +0100
+
 realtek-rtl8814au-dkms (5.8.5.1~git20210730.824d1d2-0kali1) kali-dev; urgency=medium
 
   * Change the upstream repo
