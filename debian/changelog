@@ -1,3 +1,11 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20220221.a538e38-0kali1) kali-dev; urgency=medium
+
+  * Update debian/watch for new upstream repo
+  * New upstream version 5.8.5.1~git20220221.a538e38
+  * Refresh patches (drop patch for kernel 5.15, fixed by upstream)
+
+ -- Sophie Brun <sophie@offensive-security.com>  Thu, 12 May 2022 10:17:23 +0200
+
 realtek-rtl8814au-dkms (5.8.5.1~git20210730.824d1d2-0kali2) kali-dev; urgency=medium
 
   * Add a patch to fix compilation with kernel 5.15
