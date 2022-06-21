@@ -1,3 +1,10 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20220614.af00239-0kali1) kali-dev; urgency=medium
+
+  * New upstream version 5.8.5.1~git20220614.af00239
+  * Add missing depend bc
+
+ -- Sophie Brun <sophie@offensive-security.com>  Tue, 21 Jun 2022 09:42:10 +0200
+
 realtek-rtl8814au-dkms (5.8.5.1~git20220221.a538e38-0kali1) kali-dev; urgency=medium
 
   * Update debian/watch for new upstream repo
