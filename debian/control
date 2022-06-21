@@ -12,7 +12,7 @@ Vcs-Browser: https://gitlab.com/kalilinux/packages/realtek-rtl8814au-dkms
 
 Package: realtek-rtl8814au-dkms
 Architecture: all
-Depends: dkms (>= 1.95), ${misc:Depends}
+Depends: dkms (>= 1.95), ${misc:Depends}, bc
 Description: Realtek RTL8814AU driver in DKMS format
  This package provides the source code for RTL8814AU Linux driver (with monitor
  mode and frame injection) to be build with dkms. Kernel sources or headers are
