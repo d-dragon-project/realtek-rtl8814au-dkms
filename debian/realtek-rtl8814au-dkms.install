@@ -1,2 +1,1 @@
-#!/usr/bin/dh-exec
-core hal include Kconfig Makefile os_dep platform usr/src/realtek-rtl8814au-${DEB_VERSION_UPSTREAM}
+core hal include Kconfig Makefile os_dep platform usr/src/realtek-rtl8814au-${env:DEB_VERSION_UPSTREAM}
