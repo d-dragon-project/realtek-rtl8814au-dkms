@@ -4,21 +4,22 @@
 
 -----
 
+#### A FAQ is available at the end of this document.
+
+-----
+
 ### All-Points Bulletin
 
 I need your help. We need to find a newer version of the source code for
-this driver. While working on source code for other recently available
-drivers I have noticed indications that Realtek is still working on this
-8814au driver. I have not been able to locate a newer version that is
-available. This driver is v5.8.5.1 dated 20191029. It is getting hard to
-maintain and has many problems. The newer drivers that I have been able
-to bring online are for the 8812au, 8811au and 8812bu chipsets and they
-are the best Realtek drivers I have seen, even if they are out-of-kernel
-and based on the wrong technology. If we can find a driver for the
-8814au that is up to date then we can make better use of our 8814au 
-adapters. The newer drivers have version numbers of 5.12.x and 5.13.x
-so please search all locations that might have a new version available.
-Ask retailers. Please help.
+this driver. While working on source code for other more recent drivers I
+have noticed indications that Realtek may still working on this 8814au
+driver. I have not been able to locate a newer version. This driver is
+v5.8.5.1 dated 20191029. It is getting hard to maintain and does not have
+many of the features that other, more modern drivers do. If we can find a
+driver for the 8814au that is up to date, we can make better use of our
+8814au adapters. A newer driver should have version numbers of 5.12.x,
+5.13.x or higher. Please search all locations that might have a new version
+available. Ask retailers. Please help.
 
 -----
 
@@ -40,15 +41,13 @@ Ask retailers. Please help.
 - Supported interface modes
   * IBSS
   * Managed
-  * AP (see *Bridged Wireless Access Point* located in the main directory of this repo)
+  * AP
   * Monitor
 - USB mode control
 - Log level control
 - LED control
 - Power saving control
 - VHT control (allows 80 MHz channel width in AP mode)
-- SU Beamformee control
-- SU Beamformer control
 
 A FAQ is available at the end of this document.
 
@@ -60,11 +59,10 @@ A FAQ is available at the end of this document.
 ### Compatible Kernels
 
 - Kernels: 2.6.24 - 5.2 (Realtek)
-- Kernels: 5.3 - 5.18 (community support)
+- Kernels: 5.3 - 6.0    (community support)
 
 ### Tested Linux Distributions
 
-- Arch Linux (kernel 5.4)
 - Arch Linux (kernel 5.11)
 
 - Fedora (kernel 5.11)
@@ -73,18 +71,13 @@ A FAQ is available at the end of this document.
 
 - Kali Linux (kernel 5.10)
 
-- Linux Mint 20.2 (Linux Mint based on Ubuntu) (kernels 5.4 and 5.11)
-
-- LMDE 4 (Linux Mint based on Debian) (kernel 4.19)
-
 - Manjaro 20.1 (kernel 5.9)
 
-- Raspberry Pi OS (2021-05-07) (ARM 32 bit) (kernel 5.10)
+- Raspberry Pi OS (2022-04-04) (ARM 64 bit) (kernel 5.10)
+
 - Raspberry Pi Desktop (x86 32 bit) (kernel 4.19)
 
-- Ubuntu 21.04 (kernel 5.11)
-- Ubuntu 20.10 (kernel 5.8)
-- Ubuntu 20.04 (kernel 5.4)
+- Ubuntu 22.04 (kernel 5.15)
 
 ### Download Locations for Tested Linux Distributions
 
@@ -92,21 +85,21 @@ A FAQ is available at the end of this document.
 - [Debian](https://www.debian.org/)
 - [Fedora](https://getfedora.org)
 - [Kali Linux](https://www.kali.org/)
-- [Linux Mint](https://www.linuxmint.com)
 - [Manjaro](https://manjaro.org)
 - [Raspberry Pi OS](https://www.raspberrypi.org)
 - [Ubuntu](https://www.ubuntu.com)
 
 ### Tested Hardware
 
-- [Wireless USB WiFi Adapter, 1900Mbps Dual Band 2.4GHz/600Mbps 5.8GHz/1300Mbps High Gain 5dBi Antennas USB 3.0]( https://www.amazon.com/gp/product/B07VCKN83P )
-- [ASUS USB-AC68 AC1900 Dual-Band USB 3.0 WiFi Adapter](https://www.amazon.com/dp/B01I7QFR10)
+- ASUS USB-AC68 AC1900 Dual-Band USB 3.0 WiFi Adapter
+- COMFAST CF-958AC
 
 ### Compatible Devices
 
 * ALFA AWUS1900
 * ASUS USB-AC68 AC1900 Dual-Band USB 3.0 WiFi Adapter
 * Edimax EW-7833 UAC AC1750 Dual-Band Wi-Fi USB 3.0 Adapter
+* COMFAST CF-958AC
 * Numerous products that are based on the supported chipset
 
 Note: Please read "supported-device-IDs" for information about how to confirm the correct driver for your adapter.
@@ -127,8 +120,15 @@ driver by running the following command:
 sudo dkms status
 ```
 
-The installation instructions are for the novice user. Experienced users are
-welcome to alter the installation to meet their needs.
+Warning: If you decide to upgrade to a new version of kernel such as 5.18 to 5.19, you
+need to remove the driver you have installed and install the newest available before
+installing the new kernel. Use the following commands in the driver directory:
+
+```
+$ sudo ./remove-driver.sh
+$ git pull
+$ sudo ./install-driver.sh
+```
 
 Temporary internet access is required for installation. There are numerous ways
 to enable temporary internet access depending on your hardware and situation.
@@ -155,10 +155,20 @@ installed. DKMS is provided by and maintained by Dell.
 It is recommended that you do not delete the driver directory after installation
 as the directory contains information and scripts that you may need in the future.
 
-There is no need to disable Secure Mode to install this driver. If Secure Mode
-is properly setup on your system, this installation will support it.
+Secure mode: The primary installation script, `install-driver.sh`, will support
+secure mode... if your distro supports the method dkms uses. I regularly test the
+installation script on systems with secure mode on. It works very well on Ubuntu based
+distros. Some distros, such as Raspberry Pi OS, do not support secure mode because the
+hardware they support does not support secure mode making it unnecessary. There are
+distros that do not work with the support currently in use. If you install this driver
+and, after a reboot, the driver is not working, you can go into the BIOS and temporarily
+turn secure mode off to see if secure mode is the problem.
 
 ### Installation Steps
+
+Note: The installation instructions are for the novice user. Experienced users are
+welcome to alter the installation to meet their needs. Support will be provided based
+on the steps below.
 
 #### Step 1: Open a terminal (e.g. Ctrl+Alt+T)
 
@@ -202,28 +212,28 @@ sudo reboot
 
 #### Step 3: Install the required packages (select the option for the OS you are using)
 
-- Option for Raspberry Pi OS (ARM/ARM64), for Raspberry Pi Desktop (x86) see below
+- Option for Raspberry Pi OS (ARM/ARM64)
 
 ```
-sudo apt install -y raspberrypi-kernel-headers bc build-essential dkms git
+sudo apt install -y raspberrypi-kernel-headers build-essential bc dkms git
 ```
 
-- Option for Debian, Kali, Linux Mint Debian Edition (LMDE) and Raspberry Pi Desktop (x86)
+- Option for Debian, Kali, and Raspberry Pi Desktop (x86)
 
 ```
-sudo apt install -y linux-headers-$(uname -r) build-essential dkms git libelf-dev
+sudo apt install -y linux-headers-$(uname -r) build-essential bc dkms git libelf-dev
 ```
 
-- Option for Ubuntu (all flavors) and Linux Mint
+- Option for Ubuntu (all flavors)
 
 ```
-sudo apt install -y dkms git build-essential
+sudo apt install -y build-essential dkms git 
 ```
 
 - Option for Fedora
 
 ```
-sudo dnf -y install git dkms kernel-devel kernel-debug-devel
+sudo dnf -y install kernel-devel kernel-debug-devel dkms git 
 ```
 
 - Option for openSUSE
@@ -354,12 +364,12 @@ the process each time a new kernel is installed in your distro.
 
 ### Driver Options ( edit-options.sh )
 
-A file called `8812au.conf` will be installed in `/etc/modprobe.d` by
+A file called `8814au.conf` will be installed in `/etc/modprobe.d` by
 default.
 
 Note: The installation script will prompt you to edit the options.
 
-Location: `/etc/modprobe.d/8812au.conf`
+Location: `/etc/modprobe.d/8814au.conf`
 
 This file will be read and applied to the driver on each system boot.
 
@@ -369,7 +379,7 @@ To edit the driver options file, run the `edit-options.sh` script
 sudo ./edit-options.sh
 ```
 
-Note: Documentation for Driver Options is included in the file `88x2bu.conf`.
+Note: Documentation for Driver Options is included in the file `8814au.conf`.
 
 -----
 
@@ -551,14 +561,13 @@ Question: The driver installation script completed successfully and the
 driver is installed but does not seem to be working. What is wrong?
 
 Answer: Turn secure boot off to see if that allows the driver to work.
-This driver is primarily tested on Debian based distros such as Linux
-Mint, Ubuntu, Raspberry Pi OS and Kali. In an attempt to make this
-driver work well on many Linux distros, other distros, including the Arch
-based Manjaro is used for testing. Currently I do not have installations
-of Fedora or OpenSUSE available for testing and reply on user reports of
-success or failure. I have two test systems with secure boot on so as to
-test secure boot. I have not seen any secure boot problems with Debian
-based systems and I don't remember problems with Manjaro.
+This driver is primarily tested on Debian based distros such as Ubuntu,
+Raspberry Pi OS and Kali. In an attempt to make this driver work well on
+many Linux distros, other distros, including the Arch based Manjaro is
+used for testing. Currently I do not have installations of Fedora or
+OpenSUSE available for testing and reply on user reports of success or
+failure. I have two test systems with secure boot on so as to  test secure
+boot. I have not seen any secure boot problems with Ubuntu based systems.
 
 dkms is used in the installation script. It helps with a lot of issues that
 will come up if a simple manual installation is used. dkms has the
@@ -588,7 +597,3 @@ to happen.
 
 -----
 
-Credits:
-
-
------
