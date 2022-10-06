@@ -2,6 +2,7 @@ From: Sophie Brun <sophie@offensive-security.com>
 Date: Mon, 13 Sep 2021 14:08:05 +0200
 Subject: Adapt dkms.conf for Kali
 
+Forwarded: not-needed
 ---
  dkms.conf | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
