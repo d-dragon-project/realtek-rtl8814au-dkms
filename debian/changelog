@@ -1,3 +1,18 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20221110.932df6f-0kali1) kali-dev; urgency=medium
+
+  [ Kali Janitor ]
+  * debian/copyright: use spaces rather than tabs to start continuation lines.
+  * Set upstream metadata fields: Repository-Browse.
+  * Set upstream metadata fields: Repository.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit.
+  * Update standards version to 4.6.2, no changes needed.
+
+  [ Sophie Brun ]
+  * New upstream version 5.8.5.1~git20221110.932df6f
+  * Refresh patches
+
+ -- Sophie Brun <sophie@offensive-security.com>  Tue, 21 Feb 2023 14:21:31 +0100
+
 realtek-rtl8814au-dkms (5.8.5.1~git20220905.3f2f680-0kali1) kali-dev; urgency=medium
 
   [ Arnaud Rebillout ]
