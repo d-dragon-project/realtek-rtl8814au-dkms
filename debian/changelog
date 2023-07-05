@@ -1,3 +1,17 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20230614.8a1908d-0kali1) kali-dev; urgency=medium
+
+  [ Steev Klimaszewski ]
+  * Override dkms autopkgtest
+
+  [ Sophie Brun ]
+  * New upstream version 5.8.5.1~git20230614.8a1908d
+  * Refresh patches
+  * Update debian/copyright
+  * Install new files
+  * Use absolute path in dkms.conf
+
+ -- Sophie Brun <sophie@offensive-security.com>  Wed, 05 Jul 2023 16:58:54 +0200
+
 realtek-rtl8814au-dkms (5.8.5.1~git20221110.932df6f-0kali1) kali-dev; urgency=medium
 
   [ Kali Janitor ]
