@@ -4,7 +4,7 @@ Source: https://github.com/morrownr/8814au
 Comment: dkms package built during installation
 
 Files: *
-Copyright: 2007-2019 Realtek Corporation
+Copyright: 2007-2023 Realtek Corporation
 License: GPL-2
 
 Files: os_dep/linux/rhashtable.*
@@ -14,7 +14,7 @@ Copyright: 2015 Herbert Xu <herbert@gondor.apana.org.au>
 License: GPL-2
 
 Files: debian/*
-Copyright: 2021 Sophie Brun <sophie@offensive-security.com>
+Copyright: 2021-2023 Sophie Brun <sophie@offensive-security.com>
 License: GPL-2
 
 License: GPL-2
