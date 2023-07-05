@@ -9,10 +9,13 @@ export DEB_VERSION_UPSTREAM
 override_dh_dkms:
 	# Force PACKAGE_VERSION to be DEB_VERSION_UPSTREAM
 	sed -i dkms.conf -e 's%^PACKAGE_VERSION=.*%PACKAGE_VERSION="$(DEB_VERSION_UPSTREAM)"%'
+	# use absolute path for dkms-make.sh
+	sed -i dkms.conf -e 's%^MAKE="./dkms-make.sh"%MAKE="/usr/src/realtek-rtl8814au-$(DEB_VERSION_UPSTREAM)/dkms-make.sh"%'
 	dh_dkms -- dkms.conf
 
 execute_after_dh_fixperms:
 	find debian/realtek-rtl8814au-dkms/usr/src -type f -exec chmod -x {} \;
+	chmod 755 debian/realtek-rtl8814au-dkms/usr/src/realtek-*/dkms-make.sh
 
 # Nothing to configure, build or auto-install (all is done after
 # installation using dkms)
