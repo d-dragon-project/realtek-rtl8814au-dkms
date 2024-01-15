@@ -1,3 +1,9 @@
+realtek-rtl8814au-dkms (5.8.5.1~git20231211.866a910-0kali1) kali-dev; urgency=medium
+
+  * New upstream version 5.8.5.1~git20231211.866a910
+
+ -- Sophie Brun <sophie@offensive-security.com>  Mon, 15 Jan 2024 14:43:10 +0100
+
 realtek-rtl8814au-dkms (5.8.5.1~git20230614.8a1908d-0kali1) kali-dev; urgency=medium
 
   [ Steev Klimaszewski ]
